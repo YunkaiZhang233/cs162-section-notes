@@ -1,35 +1,37 @@
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+void swap(char* a, int x, int y) {
+    char t = a[x];
+    a[x] = a[y];
+    a[y] = t;
+}
 
 int partition(char* a, int l, int r) {
     int pivot;
     int i;
     int j;
-    int t;
     pivot = a[l];
     i = l;
     j = r+1;
-
-    while (1) {
+    while (i < j) {
         do {
             ++i;
         } while (a[i] <= pivot && i <= r);
         do {
             --j;
-        } while (a[j] > pivot);
+        } while (a[j] > pivot && j > i);
         if (i >= j) {
             break;
         }
-        t = a[i];
-        a[i] = a[j];
-        a[j] = t;
+        swap(a, i, j);
     }
-    t = a[l];
-    a[l] = a[j];
-    a[j] = t;
+    swap(a, l, j);
     return j;
 } 
 
-void sort(char a[], int l, int r) {
+void sort(char* a, int l, int r) {
     int j;
     if (l < r) {
         j = partition(a, l, r);
@@ -38,12 +40,15 @@ void sort(char a[], int l, int r) {
     }
 }
 
-void main(int argc, char** argv) {
+int main(int argc, char** argv) {
     char* a = NULL;
+    const char* asuna = "Asuna is the best char!";
     if (argc > 1) {
-        a = argv[1];
+        a = malloc(strlen(argv[1]) + 1);
+        strcpy(a, argv[1]);
     } else {
-        a = "Asuna is the best char!";
+        a = malloc(strlen(asuna) + 1);
+        strcpy(a, asuna);
     }
     printf("Unsorted \"%s\"\n", a);
     sort(a, 0, strlen(a) - 1);
